@@ -49,3 +49,16 @@ import EllipseSmoothing
 ```
 
 The project targets Lean `v4.30.0` and the matching mathlib tag.
+
+## Paper
+
+The accompanying modular LaTeX paper is located in [`paper/`](paper/). It can
+be rendered on Windows with:
+
+```powershell
+.\paper\render.ps1
+```
+
+Each export receives a filename derived from the current Git tag or commit.
+GitHub Actions additionally produces a versioned PDF artifact on every push and
+pull request.

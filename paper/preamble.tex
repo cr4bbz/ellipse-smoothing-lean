@@ -1,0 +1,59 @@
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[provide=*,ngerman]{babel}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage[a4paper,margin=30mm]{geometry}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{fancyhdr}
+\usepackage[hidelinks]{hyperref}
+
+\InputIfFileExists{build/version.tex}{}{%
+  \newcommand{\PaperVersion}{development}%
+  \newcommand{\PaperCommit}{unknown}%
+  \newcommand{\PaperBuildDate}{unknown}%
+}
+
+\definecolor{codegray}{RGB}{245,245,245}
+\definecolor{codeblue}{RGB}{32,74,135}
+
+\lstdefinelanguage{Lean}{
+  morekeywords={def,theorem,structure,where,by,exact,have,calc,if,then,else,
+    noncomputable,section,end,namespace,open,import},
+  sensitive=true,
+  morecomment=[l]{--},
+  morecomment=[s]{/-}{-/},
+  morestring=[b]"
+}
+
+\lstset{
+  language=Lean,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{codeblue}\bfseries,
+  backgroundcolor=\color{codegray},
+  frame=single,
+  rulecolor=\color{black!15},
+  breaklines=true,
+  columns=fullflexible,
+  showstringspaces=false,
+  literate={≤}{{$\leq$}}1 {×}{{$\times$}}1
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Von der Dreieckswelle zur harmonischen Ellipse}
+\fancyhead[R]{\small \PaperVersion}
+\fancyfoot[C]{\thepage}
+\setlength{\headheight}{14pt}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\sgn}{\operatorname{sgn}}
+\newcommand{\OnEllipse}{\operatorname{OnEllipse}}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.7em}
+\setlength{\emergencystretch}{1.5em}

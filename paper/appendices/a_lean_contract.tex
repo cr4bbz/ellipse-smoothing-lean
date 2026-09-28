@@ -1,0 +1,27 @@
+\section{Formaler Gate-Vertrag}
+
+Der aktuelle Lean-Stand trennt abgeschlossene und offene Verpflichtungen:
+
+\begin{center}
+\begin{tabular}{p{0.56\textwidth}p{0.24\textwidth}}
+\toprule
+Aussage & Status \\
+\midrule
+Allgemeiner Wurzellift erfüllt die Ellipseninvariante & bewiesen \\
+Dreieckssteuerung liegt in $[-1,1]$ & bewiesen \\
+Zweigwechsel lässt die Invariante unverändert & bewiesen \\
+Geglättete Reihe ist in Lean definiert & implementiert \\
+Summierbarkeit und Nennerpositivität & offen \\
+Randfälle $\lambda=0$ und $\lambda=1$ & offen \\
+Glattheit und Endpunktgeschwindigkeit & offen \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Der Audit kann lokal durch folgende Befehle ergänzt werden:
+
+\begin{lstlisting}
+#print axioms EllipseSmoothing.ellipseLift_onEllipse
+#print axioms EllipseSmoothing.triangleLift_onEllipse
+#print axioms EllipseSmoothing.smoothedPath_onEllipse
+\end{lstlisting}

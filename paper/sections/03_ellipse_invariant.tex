@@ -1,0 +1,36 @@
+\section{Der invariante Ellipsenlift}
+
+Es seien $(c_x,c_y)\in\R^2$ der Mittelpunkt und $a,b\in\R$ die Halbachsen.
+Für einen Kontrollwert $g\in[-1,1]$ und einen Zweigwert
+$s\in\{-1,1\}$ definieren wir
+\begin{equation}\label{eq:lift}
+  L(g,s)=
+  \left(
+    c_x+ag,
+    c_y+bs\sqrt{1-g^2}
+  \right).
+\end{equation}
+
+Statt der divisionsbehafteten Standardform verwenden wir die polynomiale
+Ellipseninvariante
+\begin{equation}\label{eq:polynomial-invariant}
+  b^2(x-c_x)^2+a^2(y-c_y)^2=a^2b^2.
+\end{equation}
+Diese Form bleibt auch bei entarteten Halbachsen sinnvoll.
+
+\subsection*{Invarianzsatz}
+
+Für jedes $g$ mit $g^2\leq1$ und jedes $s$ mit $s^2=1$ erfüllt
+$L(g,s)$ die Gleichung~\eqref{eq:polynomial-invariant}.
+
+\subsection*{Beweis}
+
+Einsetzen von~\eqref{eq:lift} ergibt
+\begin{align*}
+ &b^2(ag)^2+a^2\left(bs\sqrt{1-g^2}\right)^2 \\
+ &\quad=a^2b^2\left(g^2+s^2(1-g^2)\right)\\
+ &\quad=a^2b^2.
+\end{align*}
+Der Beweis benutzt ausschließlich $g^2\leq1$ und $s^2=1$. Insbesondere ist
+unerheblich, ob $g$ durch eine lineare Funktion, eine Fourierreihe oder den
+Kosinus erzeugt wurde. Genau darin liegt die Invariante des Modells.

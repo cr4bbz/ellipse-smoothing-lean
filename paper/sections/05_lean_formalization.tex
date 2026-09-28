@@ -1,0 +1,35 @@
+\section{Formalisierung in Lean 4}
+
+Die Datei \texttt{EllipseSmoothing.lean} bildet den bisherigen Beweisstand ab.
+Der geometrische Kern wird divisionsfrei formuliert:
+
+\begin{lstlisting}
+def OnEllipse (E : Ellipse) (p : R × R) : Prop :=
+  E.b ^ 2 * (p.1 - E.cx) ^ 2 +
+    E.a ^ 2 * (p.2 - E.cy) ^ 2 =
+      E.a ^ 2 * E.b ^ 2
+\end{lstlisting}
+
+Der zentrale Satz abstrahiert vollständig von der Herkunft des Kontrollwertes:
+
+\begin{lstlisting}
+theorem ellipseLift_onEllipse
+    (E : Ellipse) {g branch : R}
+    (hg : g ^ 2 ≤ 1)
+    (hbranch : branch ^ 2 = 1) :
+    OnEllipse E (ellipseLift E g branch)
+\end{lstlisting}
+
+Bereits formal bewiesen sind:
+\begin{itemize}
+  \item die Ellipseninvariante des allgemeinen Wurzellifts,
+  \item die Unabhängigkeit vom oberen oder unteren Zweig,
+  \item die Endpunkte und Beschränktheit der linearen Dreieckssteuerung,
+  \item die Vererbung der Invariante an jede zulässige Steuerfunktion.
+\end{itemize}
+
+Die geglättete unendliche Reihe ist exakt definiert. Noch nicht formal bewiesen
+sind ihre Summierbarkeit und Positivität, die globale Schranke
+$G_\lambda^2\leq1$, die beiden Randfälle sowie die Glattheit für
+$0<\lambda$. Diese Aussagen werden nicht durch zusätzliche Axiome ersetzt,
+sondern bleiben explizite Ziele des nächsten Gates.

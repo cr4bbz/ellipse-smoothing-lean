@@ -2,3 +2,8 @@
 build/
 *.olean
 *.ilean
+paper/build/
+paper/dist/
+paper/render.log
+paper/render-path.txt
+tmp/

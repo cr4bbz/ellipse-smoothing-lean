@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use this work, please cite it using the metadata below."
+title: "Von der Dreieckswelle zur harmonischen Ellipse: Eine invariante Kurve unter geglätteter Parametrisierung"
+type: software
+authors:
+  - family-names: Voigt
+    given-names: Julian
+date-released: 2026-09-28
+version: 0.1.0
+repository-code: "https://github.com/cr4bbz/ellipse-smoothing-lean"

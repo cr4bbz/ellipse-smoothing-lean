@@ -1,0 +1,35 @@
+\documentclass[11pt,a4paper]{article}
+
+\input{preamble}
+\input{metadata}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+
+\begin{center}
+  \small
+  Version \PaperVersion\quad·\quad Commit \texttt{\PaperCommit}\quad·\quad
+  Export \PaperBuildDate
+\end{center}
+
+\vspace{1.5em}
+
+\input{sections/00_abstract}
+
+\tableofcontents
+\newpage
+
+\input{sections/01_motivation}
+\input{sections/02_atomic_model}
+\input{sections/03_ellipse_invariant}
+\input{sections/04_smoothing}
+\input{sections/05_lean_formalization}
+\input{sections/06_outlook}
+
+\appendix
+\input{appendices/a_lean_contract}
+\input{backmatter/references}
+
+\end{document}

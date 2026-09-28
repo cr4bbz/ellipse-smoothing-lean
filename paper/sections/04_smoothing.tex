@@ -1,0 +1,48 @@
+\section{Glättung durch ungerade Harmonische}
+
+Für $0\leq\lambda\leq1$ definieren wir die Gewichte
+\[
+  w_k(\lambda)=
+  \frac{(1-\lambda)^{(2k+1)^2-1}}{(2k+1)^2}
+  \qquad (k\in\N)
+\]
+und die normierte Steuerfunktion
+\begin{equation}\label{eq:smooth-control}
+  G_\lambda(\theta)=
+  \frac{
+    \displaystyle\sum_{k=0}^{\infty}
+      w_k(\lambda)\cos((2k+1)\theta)
+  }{
+    \displaystyle\sum_{k=0}^{\infty}w_k(\lambda)
+  }.
+\end{equation}
+
+Am ungedämpften Rand $\lambda=0$ liefert die klassische Reihe
+\[
+  \sum_{k=0}^{\infty}
+  \frac{\cos((2k+1)\theta)}{(2k+1)^2}
+  =\frac{\pi^2}{8}-\frac{\pi\theta}{4},
+  \qquad 0\leq\theta\leq\pi,
+\]
+nach Normierung die Dreieckswelle
+\[
+  G_0(\theta)=1-\frac{2\theta}{\pi}.
+\]
+Für $\lambda=1$ bleibt nur $k=0$ erhalten, sodass
+\[
+  G_1(\theta)=\cos\theta.
+\]
+
+Die vollständige Bahn lautet
+\begin{equation}\label{eq:smoothed-path}
+  \Gamma_\lambda(\theta)=
+  \left(
+    c_x+aG_\lambda(\theta),
+    c_y+b\,\sgn(\sin\theta)
+      \sqrt{1-G_\lambda(\theta)^2}
+  \right).
+\end{equation}
+Sobald $G_\lambda(\theta)^2\leq1$ gezeigt ist, folgt die
+Ellipseninvariante unmittelbar aus dem allgemeinen Lift. Die analytische
+Komplexität der Reihe und die algebraische Invarianz der Kurve bleiben damit
+streng getrennt.

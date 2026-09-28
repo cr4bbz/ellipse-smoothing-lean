@@ -1,0 +1,41 @@
+name: Render paper
+
+on:
+  push:
+    branches: [main]
+    tags: ['paper-v*']
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install TeX dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes latexmk texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-lang-german
+
+      - name: Render versioned PDF
+        id: render
+        env:
+          PAPER_VERSION: ci-${{ github.run_number }}-${{ github.sha }}
+        run: |
+          chmod +x paper/render.sh
+          pdf_path=$(./paper/render.sh)
+          echo "pdf_path=$pdf_path" >> "$GITHUB_OUTPUT"
+
+      - name: Upload paper artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ellipse-smoothing-paper-ci-${{ github.run_number }}-${{ github.sha }}
+          path: ${{ steps.render.outputs.pdf_path }}
+          if-no-files-found: error
