@@ -1,4 +1,13 @@
-import Mathlib
+import Mathlib.Analysis.Complex.Trigonometric
+import Mathlib.Analysis.Normed.Group.InfiniteSum
+import Mathlib.Analysis.PSeries
+import Mathlib.Analysis.SpecialFunctions.Sqrt
+import Mathlib.Topology.Algebra.InfiniteSum.Order
+import Mathlib.Tactic.Linarith
+import Mathlib.Tactic.NormNum
+import Mathlib.Tactic.Order
+import Mathlib.Tactic.Positivity
+import Mathlib.Tactic.Ring
 
 /-!
 # Ellipse smoothing
@@ -11,9 +20,10 @@ The main distinction is between:
 * the control law, which determines how the ellipse is traversed.
 
 The triangular control law is proved admissible on the fundamental interval.
-The smoothed odd-harmonic series is defined exactly; its analytic properties
-(summability, bounds, endpoint jets and limits) are deliberately exposed as
-the next proof obligations rather than postulated as axioms.
+The smoothed odd-harmonic series is defined exactly.  Summability, positivity
+of its normalizing denominator, and the global unit bound are proved on the
+closed smoothing interval.  Endpoint identification and regularity remain
+explicit future obligations rather than postulated axioms.
 -/
 
 namespace EllipseSmoothing
@@ -136,6 +146,119 @@ def smoothNumerator (lam θ : ℝ) : ℝ :=
 def smoothControl (lam θ : ℝ) : ℝ :=
   smoothNumerator lam θ / smoothDenominator lam
 
+/-! ## Gate 2: analytic admissibility of the smoothed control -/
+
+/-- Odd harmonics form an injective subsequence of the natural numbers. -/
+theorem oddHarmonic_injective : Function.Injective oddHarmonic := by
+  intro k m h
+  unfold oddHarmonic at h
+  omega
+
+/-- The square-reciprocal majorant along odd harmonics is summable. -/
+theorem summable_oddHarmonic_inv_sq :
+    Summable (fun k : ℕ => 1 / (oddHarmonic k : ℝ) ^ 2) := by
+  have hp : Summable (fun n : ℕ => 1 / (n : ℝ) ^ 2) :=
+    (Real.summable_one_div_nat_pow (p := 2)).2 (by norm_num)
+  simpa [Function.comp_def] using hp.comp_injective oddHarmonic_injective
+
+/-- In the smoothing interval every harmonic weight is nonnegative. -/
+theorem smoothingWeight_nonneg
+    {lam : ℝ} (_hlam0 : 0 ≤ lam) (hlam1 : lam ≤ 1) (k : ℕ) :
+    0 ≤ smoothingWeight lam k := by
+  have hbase : 0 ≤ 1 - lam := by linarith
+  unfold smoothingWeight
+  positivity
+
+/-- Every smoothing weight is dominated by its triangular-wave coefficient. -/
+theorem smoothingWeight_le_majorant
+    {lam : ℝ} (hlam0 : 0 ≤ lam) (hlam1 : lam ≤ 1) (k : ℕ) :
+    smoothingWeight lam k ≤ 1 / (oddHarmonic k : ℝ) ^ 2 := by
+  have hbase0 : 0 ≤ 1 - lam := by linarith
+  have hbase1 : 1 - lam ≤ 1 := by linarith
+  have hpow : (1 - lam) ^ (oddHarmonic k ^ 2 - 1) ≤ 1 :=
+    pow_le_one₀ hbase0 hbase1
+  unfold smoothingWeight
+  rw [div_eq_mul_inv, div_eq_mul_inv]
+  exact mul_le_mul_of_nonneg_right hpow (by positivity)
+
+/-- The denominator series converges throughout the closed smoothing interval. -/
+theorem summable_smoothingWeight
+    {lam : ℝ} (hlam0 : 0 ≤ lam) (hlam1 : lam ≤ 1) :
+    Summable (smoothingWeight lam) := by
+  refine Summable.of_norm_bounded summable_oddHarmonic_inv_sq ?_
+  intro k
+  have hw := smoothingWeight_nonneg hlam0 hlam1 k
+  simpa [Real.norm_eq_abs, abs_of_nonneg hw] using
+    smoothingWeight_le_majorant hlam0 hlam1 k
+
+@[simp]
+theorem smoothingWeight_zero_index (lam : ℝ) : smoothingWeight lam 0 = 1 := by
+  norm_num [smoothingWeight, oddHarmonic]
+
+/-- The normalizing denominator is not merely nonzero but at least one. -/
+theorem one_le_smoothDenominator
+    {lam : ℝ} (hlam0 : 0 ≤ lam) (hlam1 : lam ≤ 1) :
+    1 ≤ smoothDenominator lam := by
+  have hsum := summable_smoothingWeight hlam0 hlam1
+  have hterm : smoothingWeight lam 0 ≤ ∑' k : ℕ, smoothingWeight lam k :=
+    hsum.le_tsum 0 (fun k _ => smoothingWeight_nonneg hlam0 hlam1 k)
+  simpa [smoothDenominator] using hterm
+
+/-- Positivity makes normalization by the denominator legitimate. -/
+theorem smoothDenominator_pos
+    {lam : ℝ} (hlam0 : 0 ≤ lam) (hlam1 : lam ≤ 1) :
+    0 < smoothDenominator lam := by
+  linarith [one_le_smoothDenominator hlam0 hlam1]
+
+/-- Multiplying the weights by cosine preserves absolute summability. -/
+theorem summable_smoothNumerator
+    {lam θ : ℝ} (hlam0 : 0 ≤ lam) (hlam1 : lam ≤ 1) :
+    Summable (fun k : ℕ =>
+      smoothingWeight lam k * Real.cos ((oddHarmonic k : ℝ) * θ)) := by
+  have hweights := summable_smoothingWeight hlam0 hlam1
+  refine Summable.of_norm_bounded hweights ?_
+  intro k
+  have hw := smoothingWeight_nonneg hlam0 hlam1 k
+  have hcos := Real.abs_cos_le_one ((oddHarmonic k : ℝ) * θ)
+  rw [Real.norm_eq_abs, abs_mul, abs_of_nonneg hw]
+  nlinarith [mul_nonneg hw (sub_nonneg.mpr hcos)]
+
+/-- The numerator is bounded in absolute value by the denominator. -/
+theorem abs_smoothNumerator_le_denominator
+    {lam θ : ℝ} (hlam0 : 0 ≤ lam) (hlam1 : lam ≤ 1) :
+    |smoothNumerator lam θ| ≤ smoothDenominator lam := by
+  have hweights := summable_smoothingWeight hlam0 hlam1
+  have hbound : ∀ k : ℕ,
+      ‖smoothingWeight lam k * Real.cos ((oddHarmonic k : ℝ) * θ)‖ ≤
+        smoothingWeight lam k := by
+    intro k
+    have hw := smoothingWeight_nonneg hlam0 hlam1 k
+    have hcos := Real.abs_cos_le_one ((oddHarmonic k : ℝ) * θ)
+    rw [Real.norm_eq_abs, abs_mul, abs_of_nonneg hw]
+    nlinarith [mul_nonneg hw (sub_nonneg.mpr hcos)]
+  simpa [smoothNumerator, smoothDenominator, Real.norm_eq_abs] using
+    tsum_of_norm_bounded hweights.hasSum hbound
+
+/-- The normalized smoothed control remains in the closed unit interval. -/
+theorem abs_smoothControl_le_one
+    {lam θ : ℝ} (hlam0 : 0 ≤ lam) (hlam1 : lam ≤ 1) :
+    |smoothControl lam θ| ≤ 1 := by
+  have hden := smoothDenominator_pos hlam0 hlam1
+  have hnum := abs_smoothNumerator_le_denominator (θ := θ) hlam0 hlam1
+  rw [smoothControl, abs_div, abs_of_pos hden]
+  exact (div_le_one hden).2 hnum
+
+/-- Squared form of admissibility, matching the contract of `ellipseLift`. -/
+theorem smoothControl_sq_le_one
+    {lam θ : ℝ} (hlam0 : 0 ≤ lam) (hlam1 : lam ≤ 1) :
+    smoothControl lam θ ^ 2 ≤ 1 := by
+  have habs := abs_smoothControl_le_one (θ := θ) hlam0 hlam1
+  have hprod :
+      0 ≤ |smoothControl lam θ| * (1 - |smoothControl lam θ|) :=
+    mul_nonneg (abs_nonneg _) (sub_nonneg.mpr habs)
+  rw [← sq_abs]
+  nlinarith
+
 /-- The corresponding smoothed ellipse traversal. -/
 def smoothedPath (E : Ellipse) (lam θ : ℝ) : ℝ × ℝ :=
   controlledPath E (smoothControl lam) θ
@@ -150,12 +273,24 @@ theorem smoothedPath_onEllipse
   unfold smoothedPath controlledPath
   exact ellipseLift_onEllipse E hbound (branchSign_sq θ)
 
+/-- Gate 2 closes the analytic precondition: every parameter in the smoothing
+interval produces a point on the same ellipse. -/
+theorem smoothedPath_onEllipse_of_mem_Icc
+    (E : Ellipse) {lam θ : ℝ} (hlam0 : 0 ≤ lam) (hlam1 : lam ≤ 1) :
+    OnEllipse E (smoothedPath E lam θ) := by
+  exact smoothedPath_onEllipse E lam θ
+    (smoothControl_sq_le_one hlam0 hlam1)
+
 /-! ## Explicit audit statements -/
 
 #check ellipseLift_onEllipse
 #check controlledPath_onEllipse
 #check triangleLift_onEllipse
 #check smoothedPath_onEllipse
+#check summable_smoothingWeight
+#check smoothDenominator_pos
+#check smoothControl_sq_le_one
+#check smoothedPath_onEllipse_of_mem_Icc
 
 end
 

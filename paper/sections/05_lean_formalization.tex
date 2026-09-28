@@ -25,11 +25,22 @@ Bereits formal bewiesen sind:
   \item die Ellipseninvariante des allgemeinen Wurzellifts,
   \item die Unabhängigkeit vom oberen oder unteren Zweig,
   \item die Endpunkte und Beschränktheit der linearen Dreieckssteuerung,
-  \item die Vererbung der Invariante an jede zulässige Steuerfunktion.
+  \item die Vererbung der Invariante an jede zulässige Steuerfunktion,
+  \item die Summierbarkeit und Nichtnegativität der Glättungsgewichte für
+        $0\leq\lambda\leq1$,
+  \item die scharfe untere Schranke $1\leq D_\lambda$ für den Nenner,
+  \item die globale Schranke $\lvert G_\lambda(\theta)\rvert\leq1$,
+  \item die Ellipseninvariante der geglätteten Bahn im gesamten
+        abgeschlossenen Glättungsintervall.
 \end{itemize}
 
-Die geglättete unendliche Reihe ist exakt definiert. Noch nicht formal bewiesen
-sind ihre Summierbarkeit und Positivität, die globale Schranke
-$G_\lambda^2\leq1$, die beiden Randfälle sowie die Glattheit für
-$0<\lambda$. Diese Aussagen werden nicht durch zusätzliche Axiome ersetzt,
-sondern bleiben explizite Ziele des nächsten Gates.
+Der Beweis benutzt die konvergente Majorante $(2k+1)^{-2}$. Weil alle Gewichte
+im Intervall $0\leq\lambda\leq1$ nichtnegativ sind und der Summand für $k=0$
+genau eins ist, gilt $D_\lambda\geq1$. Aus
+$\lvert\cos((2k+1)\theta)\rvert\leq1$ folgt dann
+$\lvert N_\lambda(\theta)\rvert\leq D_\lambda$ und nach Division die globale
+Zulässigkeit.
+
+Noch offen sind die exakte Identifikation der beiden Randfälle und die
+Glattheit für $0<\lambda$. Auch diese Aussagen werden nicht durch zusätzliche
+Axiome ersetzt, sondern bleiben explizite Ziele des nächsten Gates.

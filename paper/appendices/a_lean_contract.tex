@@ -11,7 +11,10 @@ Allgemeiner Wurzellift erfüllt die Ellipseninvariante & bewiesen \\
 Dreieckssteuerung liegt in $[-1,1]$ & bewiesen \\
 Zweigwechsel lässt die Invariante unverändert & bewiesen \\
 Geglättete Reihe ist in Lean definiert & implementiert \\
-Summierbarkeit und Nennerpositivität & offen \\
+Summierbarkeit der Glättungsgewichte & bewiesen \\
+Nichtnegativität und Nennerpositivität & bewiesen \\
+Globale Schranke $\lvert G_\lambda(\theta)\rvert\leq1$ & bewiesen \\
+Ellipseninvariante für $0\leq\lambda\leq1$ & bewiesen \\
 Randfälle $\lambda=0$ und $\lambda=1$ & offen \\
 Glattheit und Endpunktgeschwindigkeit & offen \\
 \bottomrule
@@ -23,5 +26,6 @@ Der Audit kann lokal durch folgende Befehle ergänzt werden:
 \begin{lstlisting}
 #print axioms EllipseSmoothing.ellipseLift_onEllipse
 #print axioms EllipseSmoothing.triangleLift_onEllipse
-#print axioms EllipseSmoothing.smoothedPath_onEllipse
+#print axioms EllipseSmoothing.smoothControl_sq_le_one
+#print axioms EllipseSmoothing.smoothedPath_onEllipse_of_mem_Icc
 \end{lstlisting}

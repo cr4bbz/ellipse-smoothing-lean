@@ -1,6 +1,6 @@
 # Ellipse smoothing in Lean 4
 
-This gate formalizes the structural claim behind the model:
+This project formalizes the structural claim behind the model:
 
 > Changing the control law changes the traversal, not the ellipse invariant.
 
@@ -11,22 +11,25 @@ This gate formalizes the structural claim behind the model:
 - independence from the upper/lower branch;
 - admissibility and endpoints of the normalized triangular branch;
 - inheritance of the ellipse invariant by any bounded control law;
-- the exact infinite odd-harmonic smoothing formula.
+- the exact infinite odd-harmonic smoothing formula;
+- summability and nonnegativity of its weights for `0 ≤ λ ≤ 1`;
+- the lower bound `1 ≤ smoothDenominator λ` and hence positivity;
+- the global estimate `|smoothControl λ θ| ≤ 1`;
+- the ellipse invariant for every smoothed path with `0 ≤ λ ≤ 1`.
 
 No project-specific axioms or `sorry` declarations are used.
 
-## Intentionally separated analytic obligations
+## Remaining analytic obligations
 
-The next gate should prove, for `0 ≤ λ ≤ 1`:
+Gate 2 closes summability, normalization, and global admissibility. The next
+gate should identify the endpoint laws and establish regularity:
 
-1. summability and positivity of `smoothDenominator`;
-2. `smoothControl λ θ ^ 2 ≤ 1`;
-3. `smoothControl 0 θ` equals the periodic triangle wave;
-4. `smoothControl 1 θ = cos θ`;
-5. smoothness for `0 < λ` and the finite endpoint-speed formula.
+1. `smoothControl 0 θ` equals the periodic triangle wave;
+2. `smoothControl 1 θ = cos θ`;
+3. smoothness for `0 < λ` and the finite endpoint-speed formula.
 
-The last theorem in the current gate shows that item 2 is the only fact needed
-to transfer the already-proved ellipse invariant to the smoothed path.
+The theorem `smoothedPath_onEllipse_of_mem_Icc` now performs the complete
+transfer from the analytic bound to the already-proved geometric invariant.
 
 ## Local build
 
@@ -45,7 +48,8 @@ import EllipseSmoothing
 
 #print axioms EllipseSmoothing.ellipseLift_onEllipse
 #print axioms EllipseSmoothing.triangleLift_onEllipse
-#print axioms EllipseSmoothing.smoothedPath_onEllipse
+#print axioms EllipseSmoothing.smoothControl_sq_le_one
+#print axioms EllipseSmoothing.smoothedPath_onEllipse_of_mem_Icc
 ```
 
 The project targets Lean `v4.30.0` and the matching mathlib tag.
